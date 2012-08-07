@@ -1,6 +1,6 @@
 # DelayedJobLoner
 
-TODO: Write a gem description
+Adds an option on handle_asynchronously or delay that specifies which attributes to check for uniqueness on. A new job will not be created if one already exists for that method and object.
 
 ## Installation
 
@@ -18,7 +18,38 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Pass the option `:unique_on` to any method that you would provide `:priority` or `:run_at`. `:unique_on` should be an array of attributes that you want to check the uniqueness of the job against.
+Here is an example:
+```ruby
+class Foo < ActiveRecord::Base
+  
+  def do_all_the_things
+    # All the things!
+  end
+  handle_asynchronously :do_all_the_things, :unique_on => [:id]
+
+  def do_some_of_the_things
+    # Some of the things!
+  end
+
+end
+```
+
+This allows you to do things like this:
+```ruby
+foo = Foo.first
+foo.do_all_the_things
+  # Creates a new job
+foo.do_all_the_things
+  # Doesn't create a new job because we already created one
+
+foo.delay(:priority => 10).do_some_of_the_things
+  # Creates a new job
+foo.delay(:priority => 10, :unique_on => [:id]).do_some_of_the_things
+  # Doesn't create a new job
+foo.delay(:priority => 10).do_some_of_the_things
+  # Creates a new job because we didn't specify :unique_on
+```
 
 ## Contributing
 
