@@ -5,6 +5,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Ian Ehlert"]
   gem.email         = ["ian.ehlert@tstmedia.com"]
   gem.description   = %q{Gem that adds the ability to prevent duplicate delayed jobs from being created.}
+  gem.summary       = %q{Adds an option on handle_asynchronously or delay that specifies which attributes to check for uniqueness on. A new job will not be created if one already exists for that method and object.}
   gem.homepage      = "https://github.com/tstmedia/delayed_job_loner"
 
   gem.files         = `git ls-files`.split($\)
