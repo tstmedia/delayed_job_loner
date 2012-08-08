@@ -3,7 +3,7 @@ module Delayed
     module ActiveRecord
       class Job < ::ActiveRecord::Base
         attr_accessor :unique_on
-        attr_accessible :unique_on
+        # attr_accessible :unique_on
 
         validate :check_uniqueness
 

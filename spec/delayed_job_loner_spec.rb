@@ -19,6 +19,8 @@ describe DelayedJobLoner do
     story2.delay(:unique_on => [:id]).tell.persisted?.should eql true
   end
 
+  # This test is broken right now because of an issue with attr_accessor not being able to be set by mass assignment in my tests.
+  # It works in real life...
   it "should not create a job if :unique_on is specified and a similar job exists" do
     story = Story.create(:text => "foo")
     story.reload
