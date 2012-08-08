@@ -14,4 +14,12 @@ Gem::Specification.new do |gem|
   gem.name          = "delayed_job_loner"
   gem.require_paths = ["lib"]
   gem.version       = DelayedJobLoner::VERSION
+
+  gem.add_dependency 'delayed_job'
+
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'activerecord'
+  gem.add_development_dependency 'sqlite3-ruby'
+  gem.add_development_dependency 'sqlite3_ar_regexp'
+  gem.add_development_dependency 'delayed_job_active_record'
 end

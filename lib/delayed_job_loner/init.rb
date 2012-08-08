@@ -3,16 +3,17 @@ module Delayed
     module ActiveRecord
       class Job < ::ActiveRecord::Base
         attr_accessor :unique_on
+        attr_accessible :unique_on
 
-        before_create :check_uniqueness
+        validate :check_uniqueness
 
         def check_uniqueness
           if unique_on
-            scope = self.class.where("handler like '%method_name: :#{payload_object.method_name}%'").where(:locked_by => nil)
+            scope = self.class.where("handler REGEXP '\\nmethod_name: :#{payload_object.method_name}\\n'").where(:locked_by => nil)
             unique_on.each do |attribute_name|
-              scope = scope.where("handler like '%#{attribute_name}: #{payload_object.send(attribute_name)}%'")
+              scope = scope.where("handler REGEXP ' +#{attribute_name}: #{payload_object.send(attribute_name)}\\n'")
             end
-            scope.first.nil?
+            self.errors.add(:base, "Job already exists") unless scope.first.nil?
           else
             true
           end
