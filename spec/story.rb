@@ -1,4 +1,4 @@
-require 'active_record'
+require 'rails'
 require 'delayed_job'
 require 'delayed_job_active_record'
 require 'delayed_job_loner'
@@ -20,7 +20,9 @@ ActiveRecord::Schema.define do
     table.datetime :locked_at
     table.string   :locked_by
     table.datetime :failed_at
+    table.string   :loner_hash
     table.timestamps
+
   end
 
   create_table :stories, :force => true do |table|
@@ -40,6 +42,6 @@ class Story < ActiveRecord::Base
   def whatever
     tell
   end
-  handle_asynchronously :whatever, :unique_on => [:id], :priority => 10
+  handle_asynchronously :whatever, :loner => true, :priority => 10
 
 end

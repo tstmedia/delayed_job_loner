@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'delayed_job'
 
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'activerecord'
+  gem.add_development_dependency 'rails'
   gem.add_development_dependency 'sqlite3-ruby'
   gem.add_development_dependency 'sqlite3_ar_regexp'
   gem.add_development_dependency 'delayed_job_active_record'

@@ -1,22 +1,33 @@
+require 'digest/md5'
+
 module Delayed
   module Backend
     module ActiveRecord
       class Job < ::ActiveRecord::Base
+        attr_accessor :loner
         attr_accessor :unique_on
-        # attr_accessible :unique_on
 
         validate :check_uniqueness
 
         def check_uniqueness
-          if unique_on
-            scope = self.class.where("handler REGEXP '\\nmethod_name: :#{payload_object.method_name}\\n'").where(:locked_by => nil)
-            unique_on.each do |attribute_name|
-              scope = scope.where("handler REGEXP ' +#{attribute_name}: #{payload_object.send(attribute_name)}\\n'")
-            end
-            self.errors.add(:base, "Job already exists") unless scope.first.nil?
+          self.loner_hash = generate_loner_hash
+          if loner || unique_on
+            self.errors.add(:base, "Job already exists") unless self.class.where(loner_hash: self.loner_hash, locked_by: nil).first.nil?
           else
             true
           end
+        end
+
+        def generate_loner_hash
+          if unique_on
+            hashable_string = "#{payload_object.method_name}"
+            unique_on.each do |attribute_name|
+              hashable_string += "::#{attribute_name}:#{payload_object.send(attribute_name)}"
+            end
+          else
+            hashable_string = "#{payload_object.method_name}::id:#{payload_object.id}"
+          end
+          Digest::MD5.base64digest(hashable_string)
         end
 
       end
