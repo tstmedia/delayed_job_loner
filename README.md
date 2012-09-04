@@ -16,6 +16,15 @@ Or install it yourself as:
 
     $ gem install delayed_job_loner
 
+### Migration
+
+The jobs table requires a migration to add the loner_hash string field.
+
+<pre>
+$ script/rails generate delayed_job_loner
+$ rake db:migrate
+</pre>
+
 ## Usage
 
 Pass the option `:unique_on` to any method that you would provide `:priority` or `:run_at`. `:unique_on` should be an array of attributes that you want to check the uniqueness of the job against.
