@@ -1,7 +1,7 @@
 require 'rails/generators'
 require 'rails/generators/migration'
 
-class LonerMigrationGenerator < Rails::Generators::Base
+class DelayedJobLonerGenerator < Rails::Generators::Base
 
   include Rails::Generators::Migration
   
