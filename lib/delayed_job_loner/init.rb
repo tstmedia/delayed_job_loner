@@ -10,8 +10,8 @@ module Delayed
         validate :check_uniqueness
 
         def check_uniqueness
-          self.loner_hash = generate_loner_hash
           if loner || unique_on
+            self.loner_hash = generate_loner_hash
             self.errors.add(:base, "Job already exists") unless self.class.where(loner_hash: self.loner_hash, locked_by: nil).first.nil?
           else
             true
